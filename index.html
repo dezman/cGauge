@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>cGauge</title>
+
+  <!-- jQuery is not required to use cGauge! -->
+  <script src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="cGauge.js"></script>
+
+  <style>
+
+  #gauge1 {
+    width: 300px;
+    height: 300px;
+    float: left;
+  }
+  #gauge2 {
+    width: 500px;
+    height: 500px;
+    float: right;
+  }
+  #gauge3 {
+    width: 600px;
+    height: 600px;
+    float: right;
+  }
+  #gauge4 {
+    width: 800px;
+    height: 800px;
+    float: left;
+    position: relative;
+    top: -400px;
+  }
+
+  </style>
+</head>
+<body>
+
+<div id="gauge1"></div>
+<div id="gauge2"></div>
+<div id="gauge3"></div>
+<div id="gauge4"></div>
+
+<script>
+
+// Here is a list of all the available options for cGauge and their default values.
+
+var defaultOptions = {
+  unit: '',
+  value     : 0,
+  maxValue  : 100,                          // actually defaults to function findGoodMax(value);
+  arcColor  : '#27AE60',
+  arcWidth  : 1,
+  font      : 'sans-serif',
+  fillColor : 'rgb(230, 230, 230)',
+  fontColor : 'rgb(80, 80, 80)',
+  tickColor : 'rgb(80,80,80)',
+  outerSpace: 0.4,
+  innerSpace: 0.4,
+  ticks     : 40,                           // If not evenly divisible by 4, long ticks will be omitted.
+  outerNums : true,
+  minNum    : true,
+  maxNum    : true,
+  shadow1: {                                // Shadows are ordered 1-4 from outermost to innermost,
+    size : .15,
+    color: 'rgb(155, 155, 155)'             // Must be rgb or hex code, css color-names will not work.             
+  },
+  shadow2: {
+    size : .15,
+    color: 'rgb(155, 155, 155)'
+  },
+  shadow3: {
+    size : .15,
+    color: 'rgb(155, 155, 155)'
+  },
+  shadow4: {
+    size : .15,
+    color: 'rgb(155, 155, 155)'                 
+  }
+}
+
+// gauge1 (conventional implimentation)
+
+var options1 = {
+    node: document.getElementById('gauge1'),
+    unit: 'zBwas',
+    value: 71,
+    outerNums: false
+}
+
+var gauge1 = new cGauge(options1);
+
+setInterval(function(){
+    gauge1.setValue(Math.round(Math.random() * 80));
+}, 3000);
+
+// gauge2 (jQuery implimentation)
+
+var options2 = {
+    unit: 'Bananas',
+    value: 17,
+    maxValue: 50,
+    arcColor: '#00d8ff',
+    innerSpace: 0,
+    ticks: 0,                                    // If not evenly divisible by 4, longer ticks will be omitted.
+    font: 'Andale Mono, AndaleMono, monospace',  // no semi-colons
+    shadow1: {                                   // Shadows are ordered 1-4 from outermost to innermost,
+      size: 0,                                   // they have two properties, size(spread) and color.
+      color: '#fff'                              // Must be rgb or hex code, css color-names will not work.
+    },
+    shadow2: {
+      size: 0
+    },
+    shadow3: {
+      size: 0
+    },
+    shadow4: {                                    
+      size: .5,                                 
+      color: '#00ff19'
+    }
+}
+
+var gauge2 = $('#gauge2').cGauge(options2);
+
+setInterval(function(){
+    gauge2.setValue(Math.round(Math.random() * 50));
+}, 3200);
+
+// gauge3
+
+var options3 = {
+    value: 45,
+    ticks: 0, 
+    arcColor: '#ff0077',
+    fillColor : 'white',
+    outerNums: false,
+    minNum: false,
+    arcWidth: .5,
+    shadow1: {
+      size: 0
+    },
+    shadow4: {
+      size: 0
+    }
+}
+
+var gauge3 = $('#gauge3').cGauge(options3);
+
+// gauge4
+
+var options4 = {
+    unit: 'Floos',
+    font: '"Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif',
+    fontColor: '#6a00ff',
+    value: 562,
+    arcColor: '#ffaa00',
+    arcWidth: .9,
+    fillColor: 'white',
+    maxValue: 1000,
+    outerNums: false,
+    minNum: false,
+    maxNum: false,
+    ticks: 32,
+    tickColor: '#00ffcb',
+    shadow1: {
+      size: 0
+    },
+    shadow2: {
+      size: .5
+    },
+    shadow3: {
+      size: 0
+    },
+    shadow4: {
+      size: 0
+    }
+}
+
+var gauge4 = $('#gauge4').cGauge(options4);
+
+</script>
+</body>
+</html>
