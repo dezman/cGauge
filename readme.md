@@ -17,11 +17,11 @@ Introducing yet another canvas gauge plugin!
 
 ###jQuery Implementation
 
-var options2 = {
-    unit: 'Bananas',
-    value: 17,
-    maxValue: 50
-}
+    var options2 = {
+        unit: 'Bananas',
+        value: 17,
+        maxValue: 50
+    }
 
 var gauge2 = $('#gauge2').cGauge(options2);
 
