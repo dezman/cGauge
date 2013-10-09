@@ -1,10 +1,10 @@
-#cGauge (Canvas Gauge)
+#cGauge
 
-Introducing yet another gauge plugin! 
+Introducing yet another canvas gauge plugin! 
 
 ## Usage
 
-###conventional implimentation
+###Conventional Implimentation
 
     var options1 = {
         node: document.getElementById('gauge1'),
@@ -15,7 +15,7 @@ Introducing yet another gauge plugin!
 
     var gauge1 = new cGauge(options1);
 
-###jQuery implimentation
+###jQuery Implimentation
 
 var options2 = {
     unit: 'Bananas',
