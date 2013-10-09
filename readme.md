@@ -12,7 +12,6 @@ Introducing yet another canvas gauge plugin!
         value: 71,
         outerNums: false
     }
-
     var gauge1 = new cGauge(options1);
 
 ###jQuery Implementation
@@ -22,8 +21,7 @@ Introducing yet another canvas gauge plugin!
         value: 17,
         maxValue: 50
     }
-
-var gauge2 = $('#gauge2').cGauge(options2);
+    var gauge2 = $('#gauge2').cGauge(options2);
 
 ## Options
 
