@@ -43,6 +43,7 @@ There are many options to mess with in cGauge, here is a list of all of them alo
       outerNums : true,
       minNum    : true,
       maxNum    : true,
+      noShadows : false,
       shadow1: {                                // Shadows are ordered 1-4 from outermost to innermost,
         size : .15,
         color: 'rgb(155, 155, 155)'             // Must be rgb or hex code, css color-names will not work.             
