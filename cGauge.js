@@ -1,13 +1,13 @@
 // cGauge.js
 // version 0.1.0
 // Robert Sadler
-// gitHub
+// github.com/robertsadler/cGauge
 
 if (typeof jQuery === 'function') {
   jQuery.fn.cGauge = function(options) {
     options.node = this.get(0);
     return new cGauge(options);
-  }
+  };
 }
 
 var cGauge = function(options) {
@@ -23,8 +23,9 @@ var cGauge = function(options) {
     font            = options.font        || 'sans-serif',
     fontColor       = options.fontColor   || 'rgb(80, 80, 80)',
     tickColor       = options.tickColor   || 'rgb(80,80,80)',
-    outerSpace      = options.outerSpace === undefined ? 0.4: options.outerSpace,
-    innerSpace      = options.innerSpace === undefined ? 0.4: options.innerSpace,
+    noShadows       = options.noShadows   || false, 
+    outerSpace      = options.outerSpace === undefined ? 0.4  : options.outerSpace,
+    innerSpace      = options.innerSpace === undefined ? 0.4  : options.innerSpace,
     ticks           = options.ticks      === undefined ? 40   : options.ticks,
     outerNums       = options.outerNums  === undefined ? true : options.outerNums,
     minNum          = options.minNum     === undefined ? true : options.minNum,
@@ -66,9 +67,16 @@ var cGauge = function(options) {
           options['shadow' + x].size = shadowSize;
         }
       } else {
-        options['shadow' + x] = {
-          color: shadowColor,
-          size: shadowSize
+        if (noShadows) {
+          options['shadow' + x] = {
+            color: shadowColor,
+            size: 0
+          };
+        } else {
+          options['shadow' + x] = {
+            color: shadowColor,
+            size: shadowSize
+          };
         }
       }
     }
@@ -80,7 +88,7 @@ var cGauge = function(options) {
 
 
   // Warnings
-  if (!document.contains(node)) {
+  if (document.contains && !document.contains(node)) {
     console.warn('cGauge DOM node not properly defined!');
   }
   
@@ -104,13 +112,13 @@ var cGauge = function(options) {
   this.setValue = function(value) {
     var val_dist = normalizeValue(value);
     setGauge(val_dist[0], val_dist[1], value);
-  }
+  };
   this.setMaxValue = function(maxValue) {
     updateMaxAndPerimeterValues(maxValue); 
-  }
+  };
   this.setUnit = function(unit) {
     updateUnit(unit);
-  }
+  };
   
   // Main
   // Outer radiant lines
@@ -134,12 +142,12 @@ var cGauge = function(options) {
   drawArc(ctx, innerTickRadius, W * 0.0076, "rgb(255,255,255)", startRadians, endRadians);
   
   // outer shadows
-  shadowMaker(ctx3, innerTickRadius, false, shadow1.color, W * outerSpace * .01, W * 0.1 * shadow1.size, 'outer', offset); // hacky, need better way to do outerSpace / innerSpace
-  shadowMaker(ctx3, innerTickRadius, false, shadow2.color, W * outerSpace * .01, W * 0.1 * shadow2.size, 'inner', offset);
+  shadowMaker(ctx3, innerTickRadius, false, shadow1.color, W * outerSpace * 0.01, W * 0.1 * shadow1.size, 'outer', offset); // hacky, need better way to do outerSpace / innerSpace
+  shadowMaker(ctx3, innerTickRadius, false, shadow2.color, W * outerSpace * 0.01, W * 0.1 * shadow2.size, 'inner', offset);
   
   // innder shadows
-  shadowMaker(ctx3, innerRadius, false, shadow3.color,  W * innerSpace * .01, W * 0.1 * shadow3.size, 'outer', offset);
-  shadowMaker(ctx3, innerRadius, false, shadow4.color,  W * innerSpace * .01, W * 0.1 * shadow4.size, 'inner', offset);
+  shadowMaker(ctx3, innerRadius, false, shadow3.color,  W * innerSpace * 0.01, W * 0.1 * shadow3.size, 'outer', offset);
+  shadowMaker(ctx3, innerRadius, false, shadow4.color,  W * innerSpace * 0.01, W * 0.1 * shadow4.size, 'inner', offset);
   
   // invoke
   if (value)
@@ -165,7 +173,7 @@ var cGauge = function(options) {
   }
 
   function updateMaxAndPerimeterValues(maxValue) {
-    var fontSize     = Math.round(W * .04);
+    var fontSize     = Math.round(W * 0.04);
     ctx.font         = fontSize + 'px ' + font;
     ctx.fillStyle    = fontColor;
     var textMax      = '' + maxValue;
@@ -174,19 +182,19 @@ var cGauge = function(options) {
     var text3_4      = '' + Math.round(maxValue * 3 / 4);
     var text1_4Width = ctx.measureText(text1_4).width;
     var text2_4Width = ctx.measureText(text2_4).width;
-    if (maxNum) { ctx.fillText(textMax, W * .75, W * .76); }
-    if (minNum) { ctx.fillText('0', W * .225, W * .76); }
+    if (maxNum) { ctx.fillText(textMax, W * 0.75, W * 0.76); }
+    if (minNum) { ctx.fillText('0', W * 0.225, W * 0.76); }
     if (outerNums) {
-      ctx.fillText(text1_4, W * .17 - text1_4Width, W * .37);
-      ctx.fillText(text2_4, W * .5 - text2_4Width/2, W * .143);
-      ctx.fillText(text3_4, W * .825, W * .37);
+      ctx.fillText(text1_4, W * 0.17 - text1_4Width, W * 0.37);
+      ctx.fillText(text2_4, W * 0.5 - text2_4Width/2, W * 0.143);
+      ctx.fillText(text3_4, W * 0.825, W * 0.37);
     }
   }
 
   function updateCenterText(val) {
     ctx4.clearRect(0, 0, W, H);
     ctx4.fillStyle     = fontColor;
-    var fontSize       = Math.round(W * .08);
+    var fontSize       = Math.round(W * 0.08);
     ctx4.font          = fontSize + 'px ' + font;
     var text           = '' + val;
     var text_width     = ctx4.measureText(text).width;
@@ -194,17 +202,17 @@ var cGauge = function(options) {
     ctx4.shadowBlur    = 1;
     ctx4.shadowOffsetX = 1;
     ctx4.shadowOffsetY = 1;    
-    ctx4.fillText(text, W/2 - text_width/2, H/2 + .03 * W);
+    ctx4.fillText(text, W/2 - text_width/2, H/2 + 0.03 * W);
   }
 
   function updateUnit(unit) {
     var text      = '' + unit;
-    var space     = W * .22;
-    var maxSize   = Math.round(W * .1);
+    var space     = W * 0.22;
+    var maxSize   = Math.round(W * 0.1);
     ctx.font      = getGoodFontSize(ctx, text, space, font, maxSize);
     ctx.fillStyle = fontColor;
     var textWidth = ctx.measureText(text).width;
-    ctx.fillText(text, W * .5 - textWidth/2, W * .5 + W * .2); // to center text
+    ctx.fillText(text, W * 0.5 - textWidth/2, W * 0.5 + W * 0.2); // to center text
   }
 
   function getGoodFontSize(ctx, text, space, font, maxSize) {
@@ -213,25 +221,41 @@ var cGauge = function(options) {
     var textWidth = ctx.measureText(text).width;
     while (textWidth > space) {
       ctx.font      = fontSize + 'px ' + font;
-      var textWidth = ctx.measureText(text).width;
-      fontSize--
+      textWidth = ctx.measureText(text).width;
+      fontSize--;
     }
     return font;
   }
 
   function setGauge(valForGauge, distance, val) {
-    var time = 500; 
+    if (!animateGauge.animating) {
+      animateGauge(valForGauge, distance, val);
+    }
+    testGaugeVal.val = val;
+    testGaugeVal.valForGauge = valForGauge;
+    testGaugeVal.distance = distance;
+  }
+  function testGaugeVal(disVal){
+    if (disVal !== testGaugeVal.val) {
+      animateGauge(testGaugeVal.valForGauge, testGaugeVal.distance, testGaugeVal.val);
+    }
+  }
+  function animateGauge(valForGauge, distance, val){
+    animateGauge.animating = true;
+    var time = 500;
     time = time / (Math.abs(valForGauge - preValForGauge));
-    if (distance != 0) {
+    if (distance !== 0) {
       preValSteps = distance === valForGauge ? val / distance : Math.abs((val - preVal) / distance);
     } else {
       preValSteps = 0;
     }
     if (valForGauge > preValForGauge) {
       var animate = setInterval(function(){
-        if (preValForGauge == valForGauge)
+        if (preValForGauge == valForGauge) {
           clearInterval(animate);
-        else {
+          animateGauge.animating = false;
+          testGaugeVal(val);
+        } else {
           if (preValForGauge + 1 == valForGauge) {
             preVal = val;
           } else {
@@ -244,9 +268,11 @@ var cGauge = function(options) {
       }, time);
     } else if (valForGauge < preValForGauge) {
       var animate2 = setInterval(function(){
-        if (preValForGauge == valForGauge)
+        if (preValForGauge == valForGauge) {
           clearInterval(animate2);
-        else {
+          animateGauge.animating = false;
+          testGaugeVal(val);
+        } else {
           if (preValForGauge - 1 == valForGauge) {
               preVal = val;
           } else {
@@ -257,7 +283,7 @@ var cGauge = function(options) {
           updateCenterText(Math.round(preVal)); 
         }
       }, time);
-    } else if (valForGauge == 0 || valForGauge == preValForGauge) {
+    } else if (valForGauge === 0 || valForGauge == preValForGauge) {
       preVal = val;
       updateCenterText(Math.round(val));
     }
@@ -272,9 +298,9 @@ var cGauge = function(options) {
     }
     daColor = daColor.substring(daColor.indexOf('(') + 1);
     var colors = daColor.split(',');
-    var r = parseInt(colors[0]);
-    var g = parseInt(colors[1]);
-    var b = parseInt(colors[2]);
+    var r = parseInt(colors[0], 10);
+    var g = parseInt(colors[1], 10);
+    var b = parseInt(colors[2], 10);
     if (location == 'both' || location == 'outer' || location === undefined) {
       for(var x = size; x < width; x++) { // outerShadow
         alpha = 1 - (x / width);
@@ -323,11 +349,11 @@ var cGauge = function(options) {
 
   function drawValueArc(val) {
     //drawArc(ctx2, W * .2185, W * 0.122, fillColor, startRadians, endRadians);
-    drawArc(ctx2, W * .2185, W * 0.14 * innerSpace * 2.2, fillColor, startRadians, endRadians); // hacky, need better way to do innerSpace
-    if (shadow2.size > .05 && shadow3.size > .05) {                                             // set meter fill to reduced width if shadows are large         
-      drawArc(ctx2, W * .2185, W * .116 * arcWidth, arcColor, startRadians, val);
+    drawArc(ctx2, W * 0.2185, W * 0.14 * innerSpace * 2.2, fillColor, startRadians, endRadians);  // hacky, need better way to do innerSpace
+    if (shadow2.size > 0.05 && shadow3.size > 0.05) {                                             // set meter fill to reduced width if shadows are large         
+      drawArc(ctx2, W * 0.2185, W * 0.116 * arcWidth, arcColor, startRadians, val);
     } else {
-      drawArc(ctx2, W * .2185, W * 0.14 * arcWidth, arcColor, startRadians, val);
+      drawArc(ctx2, W * 0.2185, W * 0.14 * arcWidth, arcColor, startRadians, val);
     }
   }
 

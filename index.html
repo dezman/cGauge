@@ -62,6 +62,7 @@ var defaultOptions = {
   outerNums : true,
   minNum    : true,
   maxNum    : true,
+  noShadows : false,
   shadow1: {                                // Shadows are ordered 1-4 from outermost to innermost,
     size : .15,
     color: 'rgb(155, 155, 155)'             // Must be rgb or hex code, css color-names will not work.             
@@ -93,30 +94,21 @@ var gauge1 = new cGauge(options1);
 
 setInterval(function(){
     gauge1.setValue(Math.round(Math.random() * 80));
-}, 3000);
+}, 5000);
 
-// gauge2 (jQuery implimentation)
+//gauge2 (jQuery implimentation)
 
 var options2 = {
     unit: 'Bananas',
     value: 17,
-    maxValue: 50,
+    maxValue: 5000,
     arcColor: '#00d8ff',
     innerSpace: 0,
-    ticks: 0,                                    // If not evenly divisible by 4, longer ticks will be omitted.
-    font: 'Andale Mono, AndaleMono, monospace',  // no semi-colons
-    shadow1: {                                   // Shadows are ordered 1-4 from outermost to innermost,
-      size: 0,                                   // they have two properties, size(spread) and color.
-      color: '#fff'                              // Must be rgb or hex code, css color-names will not work.
-    },
-    shadow2: {
-      size: 0
-    },
-    shadow3: {
-      size: 0
-    },
+    ticks: 0,
+    font: 'Andale Mono, AndaleMono, monospace',
+    noShadows: true,
     shadow4: {                                    
-      size: .5,                                 
+      size: .5,
       color: '#00ff19'
     }
 }
@@ -124,60 +116,47 @@ var options2 = {
 var gauge2 = $('#gauge2').cGauge(options2);
 
 setInterval(function(){
-    gauge2.setValue(Math.round(Math.random() * 50));
-}, 3200);
+    gauge2.setValue(Math.round(Math.random() * options2.maxValue));
+}, 6205);
 
 // gauge3
 
 var options3 = {
     value: 45,
-    ticks: 0, 
+    ticks: 16,
+    maxValue: 130, 
     arcColor: '#ff0077',
-    fillColor : 'white',
+    unit: '°F',
     outerNums: false,
     minNum: false,
-    arcWidth: .5,
-    shadow1: {
-      size: 0
-    },
-    shadow4: {
-      size: 0
-    }
+    maxNum: false,
+    arcWidth: .87,
+    noShadows: true
 }
 
 var gauge3 = $('#gauge3').cGauge(options3);
 
-// gauge4
+setInterval(function(){
+    gauge3.setValue(Math.round(Math.random() * options3.maxValue));
+}, 8542);
 
 var options4 = {
     unit: 'Floos',
-    font: '"Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif',
-    fontColor: '#6a00ff',
+    font: 'sans-serif',
     value: 562,
     arcColor: '#ffaa00',
-    arcWidth: .9,
+    arcWidth: .8,
     fillColor: 'white',
     maxValue: 1000,
-    outerNums: false,
-    minNum: false,
-    maxNum: false,
-    ticks: 32,
-    tickColor: '#00ffcb',
-    shadow1: {
-      size: 0
-    },
-    shadow2: {
-      size: .5
-    },
-    shadow3: {
-      size: 0
-    },
-    shadow4: {
-      size: 0
-    }
+    ticks: 1600,
+    noShadows: true
 }
 
 var gauge4 = $('#gauge4').cGauge(options4);
+
+setInterval(function(){
+    gauge4.setValue(Math.round(Math.random() * options4.maxValue));
+}, 9145);
 
 </script>
 </body>
