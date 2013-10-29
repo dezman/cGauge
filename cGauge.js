@@ -16,7 +16,6 @@ var cGauge = function(options) {
     node            = options.node,
     unit            = options.unit        || '',
     value           = options.value       || 0,
-    maxValue        = options.maxValue    || findGoodMax(value),
     arcColor        = options.arcColor    || '#27AE60',
     arcWidth        = options.arcWidth    || 1,
     fillColor       = options.fillColor   || 'rgb(230, 230, 230)',
@@ -24,12 +23,16 @@ var cGauge = function(options) {
     fontColor       = options.fontColor   || 'rgb(80, 80, 80)',
     tickColor       = options.tickColor   || 'rgb(80,80,80)',
     noShadows       = options.noShadows   || false, 
-    outerSpace      = options.outerSpace === undefined ? 0.4  : options.outerSpace,
-    innerSpace      = options.innerSpace === undefined ? 0.4  : options.innerSpace,
-    ticks           = options.ticks      === undefined ? 40   : options.ticks,
-    outerNums       = options.outerNums  === undefined ? true : options.outerNums,
-    minNum          = options.minNum     === undefined ? true : options.minNum,
-    maxNum          = options.maxNum     === undefined ? true : options.maxNum,
+    minValue        = options.minValue    || 0,
+    maxValue        = options.maxValue   === undefined ? findGoodMax(value) : options.maxValue,
+    center          = options.center     === undefined ? true               : options.center,
+    outerSpace      = options.outerSpace === undefined ? 0.4                : options.outerSpace,
+    innerSpace      = options.innerSpace === undefined ? 0.4                : options.innerSpace,
+    ticks           = options.ticks      === undefined ? 40                 : options.ticks,
+    outerNums       = options.outerNums  === undefined ? true               : options.outerNums,
+    minNum          = options.minNum     === undefined ? true               : options.minNum,
+    maxNum          = options.maxNum     === undefined ? true               : options.maxNum,
+    valueRange      = maxValue - minValue,
     shadowColor     = 'rgb(155, 155, 155)',
     shadowSize      = 0.15,
     
@@ -99,10 +102,15 @@ var cGauge = function(options) {
       ctx4 = createCanvas(4, W, H);
   
   function createCanvas(num, width, height) {
+    var left = 0, top = 0;
+    if (center) {
+      left = (nodeW - W) / 2 + 'px';
+      top  = (nodeH - H) / 2 + 'px';
+    }
     var canvasNode = document.createElement('canvas');
     canvasNode.setAttribute('width', width);
     canvasNode.setAttribute('height', height);
-    canvasNode.setAttribute('style', 'position: absolute');
+    canvasNode.setAttribute('style', 'position: absolute;' /* left: ' + left + '; top: ' + top + ';'*/);
     canvasNode.setAttribute('id', nodeID + 'Canvas' + num);
     node.appendChild(canvasNode);
     return canvasNode.getContext("2d");
@@ -150,11 +158,11 @@ var cGauge = function(options) {
   shadowMaker(ctx3, innerRadius, false, shadow4.color,  W * innerSpace * 0.01, W * 0.1 * shadow4.size, 'inner', offset);
   
   // invoke
-  if (value)
+  if (value !== undefined)
     this.setValue(value);
-  if (maxValue)
+  if (value !== undefined)
     this.setMaxValue(maxValue);
-  if (unit)
+  if (value !== undefined)
     this.setUnit(unit);
 
   function findGoodMax(x) {
@@ -166,8 +174,18 @@ var cGauge = function(options) {
   }
 
   function normalizeValue(val){
-    var valForGauge = Math.round((val * 272) / maxValue);
-    if (valForGauge > 272) { valForGauge = 272; }
+    var valForGauge;
+    if (val < minValue) {
+      valForGauge = 0;
+    }
+    else {
+      var totalRange = Math.abs(minValue - maxValue);
+      var computedVal = Math.abs(minValue - val);
+      valForGauge = Math.round((computedVal * 272) / totalRange);      
+    }
+
+    if (valForGauge < 0) { valForGauge = 0; }
+    else if (valForGauge > 272) { valForGauge = 272; }
     var distance = Math.abs(valForGauge - preValForGauge);
     return [valForGauge, distance];
   }
@@ -176,14 +194,16 @@ var cGauge = function(options) {
     var fontSize     = Math.round(W * 0.04);
     ctx.font         = fontSize + 'px ' + font;
     ctx.fillStyle    = fontColor;
-    var textMax      = '' + maxValue;
-    var text1_4      = '' + Math.round(maxValue / 4);
-    var text2_4      = '' + Math.round(maxValue / 2);
-    var text3_4      = '' + Math.round(maxValue * 3 / 4);
+    var text1_4      = '' + Math.round((valueRange / 4) + minValue);
+    var text2_4      = '' + Math.round((valueRange / 2) + minValue);
+    var text3_4      = '' + Math.round((valueRange * 3 / 4)  + minValue);
     var text1_4Width = ctx.measureText(text1_4).width;
     var text2_4Width = ctx.measureText(text2_4).width;
-    if (maxNum) { ctx.fillText(textMax, W * 0.75, W * 0.76); }
-    if (minNum) { ctx.fillText('0', W * 0.225, W * 0.76); }
+    if (maxNum) { ctx.fillText(maxValue, W * 0.75, W * 0.77); }
+    if (minNum) {
+      var minValueWidth = ctx.measureText(minValue).width;
+      ctx.fillText(minValue, W * 0.249 - minValueWidth, W * 0.77); 
+    }
     if (outerNums) {
       ctx.fillText(text1_4, W * 0.17 - text1_4Width, W * 0.37);
       ctx.fillText(text2_4, W * 0.5 - text2_4Width/2, W * 0.143);
@@ -286,6 +306,7 @@ var cGauge = function(options) {
     } else if (valForGauge === 0 || valForGauge == preValForGauge) {
       preVal = val;
       updateCenterText(Math.round(val));
+      animateGauge.animating = false;
     }
   }
   function shadowMaker(context, radius, direction, color, size, width, location, offset) {
