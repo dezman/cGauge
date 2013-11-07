@@ -3,7 +3,7 @@
 // Robert Sadler
 // github.com/robertsadler/cGauge
 
-if (typeof jQuery === 'function') {
+if (typeof jQuery === 'function' && typeof jQuery.fn === 'object') {
   jQuery.fn.cGauge = function(options) {
     options.node = this.get(0);
     return new cGauge(options);
@@ -190,7 +190,7 @@ var cGauge = function(options) {
     x = (x/y);
     x = Math.ceil(x);
     x = x*y;
-    return x;
+    return x || 10;
   }
 
   function normalizeValue(val){
