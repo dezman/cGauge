@@ -47,23 +47,31 @@
 // Here is a list of all the available options for cGauge and their default values.
 
 var defaultOptions = {
-  unit: '',
-  value     : 0,
-  maxValue  : 100,                          // actually defaults to function findGoodMax(value);
-  arcColor  : '#27AE60',
-  arcWidth  : 1,
-  font      : 'sans-serif',
-  fillColor : 'rgb(230, 230, 230)',
-  fontColor : 'rgb(80, 80, 80)',
-  tickColor : 'rgb(80,80,80)',
-  outerSpace: 0.4,
-  innerSpace: 0.4,
-  ticks     : 40,                           // If not evenly divisible by 4, long ticks will be omitted.
-  outerNums : true,
-  minNum    : true,
-  maxNum    : true,
-  center    : true,                         // centers gauge within containing element
-  noShadows : false,
+  unit         : '',
+  title        : '',
+  titleOffset  : [0, 0],                    // [x, y] offset, numbers only
+  fontSize     : '',                        // you must specify units i.e. '12px'
+  valueFontSize: '',                        // defaults to fontSize if defined
+  titleFontSize: '',
+  unitFontSize : '',
+  perimFontSize: '',
+  value        : 0,
+  min          : 0,
+  max          : 100,                       // actually defaults to function findGoodMax(value);
+  arcColor     : '#27AE60',
+  arcWidth     : 1,
+  font         : 'sans-serif',
+  fillColor    : 'rgb(230, 230, 230)',
+  fontColor    : 'rgb(80, 80, 80)',
+  tickColor    : 'rgb(80,80,80)',
+  outerSpace   : 0.4,
+  innerSpace   : 0.4,
+  ticks        : 40,                        // If not evenly divisible by 4, long ticks will be omitted.
+  outerNums    : true,
+  minNum       : true,
+  maxNum       : true,
+  center       : true,                      // centers gauge within containing element
+  noShadows    : false,
   shadow1: {                                // Shadows are ordered 1-4 from outermost to innermost,
     size : .15,
     color: 'rgb(155, 155, 155)'             // Must be rgb or hex code, css color-names will not work.             
@@ -86,6 +94,8 @@ var defaultOptions = {
 
 var options1 = {
     node: document.getElementById('gauge1'),
+    title: 'Cool Animals',
+    titleFontSize: '18px',
     unit: 'zBwas',
     value: 71,
     outerNums: false
@@ -102,8 +112,8 @@ setInterval(function(){
 var options2 = {
     unit: 'Bananas',
     value: -5,
-    minValue: -200,
-    maxValue: 0,
+    min: -200,
+    max: 0,
     arcColor: '#00d8ff',
     innerSpace: 0,
     ticks: 0,
@@ -124,9 +134,15 @@ setInterval(function(){
 var options3 = {
     value: 45,
     ticks: 16,
-    maxValue: 130, 
+    max: 130, 
     arcColor: '#ff0077',
     unit: '°F',
+    perimFontSize: '15px',
+    unitFontSize: '5px',
+    valueFontSize: '20px',
+    titleFontSize: '20px',
+    title: 'My Temp.',
+    titleOffset: [0, -20],
     // outerNums: false,
     // minNum: false,
     // maxNum: false,
@@ -137,7 +153,7 @@ var options3 = {
 var gauge3 = $('#gauge3').cGauge(options3);
 
 setInterval(function(){
-    gauge3.setValue(Math.round(Math.random() * options3.maxValue));
+    gauge3.setValue(Math.round(Math.random() * options3.max));
 }, 8542);
 
 var options4 = {
@@ -147,8 +163,8 @@ var options4 = {
     arcColor: '#ffaa00',
     arcWidth: .8,
     fillColor: 'white',
-    maxValue: 1000,
-    minValue: -1000,
+    max: 1000,
+    min: -1000,
     ticks: 1600,
     noShadows: true
 }
@@ -156,7 +172,7 @@ var options4 = {
 var gauge4 = $('#gauge4').cGauge(options4);
 
 setInterval(function(){
-    gauge4.setValue(Math.round((Math.random() * options4.maxValue * 2)) - options4.maxValue);
+    gauge4.setValue(Math.round((Math.random() * options4.max * 2)) - options4.max);
 }, 9562);
 
 </script>

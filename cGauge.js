@@ -14,17 +14,24 @@ var cGauge = function(options) {
 
   var
     node            = options.node,
-    unit            = options.unit        || '',
-    value           = options.value       || 0,
-    arcColor        = options.arcColor    || '#27AE60',
-    arcWidth        = options.arcWidth    || 1,
-    fillColor       = options.fillColor   || 'rgb(230, 230, 230)',
-    font            = options.font        || 'sans-serif',
-    fontColor       = options.fontColor   || 'rgb(80, 80, 80)',
-    tickColor       = options.tickColor   || 'rgb(80,80,80)',
-    noShadows       = options.noShadows   || false, 
-    minValue        = options.minValue    || 0,
-    maxValue        = options.maxValue   === undefined ? findGoodMax(value) : options.maxValue,
+    fontSize        = options.fontSize,
+    valueFontSize   = options.valueFontSize || fontSize,
+    titleFontSize   = options.titleFontSize || fontSize,
+    unitFontSize    = options.unitFontSize  || fontSize,
+    perimFontSize   = options.perimFontSize || fontSize,
+    title           = options.title         || '',
+    titleOffset     = options.titleOffset   || [0, 0],
+    unit            = options.unit          || '',
+    value           = options.value         || 0,
+    arcColor        = options.arcColor      || '#27AE60',
+    arcWidth        = options.arcWidth      || 1,  
+    fillColor       = options.fillColor     || 'rgb(230, 230, 230)',
+    font            = options.font          || 'sans-serif',
+    fontColor       = options.fontColor     || 'rgb(80, 80, 80)',
+    tickColor       = options.tickColor     || 'rgb(80,80,80)',
+    noShadows       = options.noShadows     || false, 
+    min             = options.min           || 0,
+    max             = options.max        === undefined ? findGoodMax(value) : options.max,
     center          = options.center     === undefined ? true               : options.center,
     outerSpace      = options.outerSpace === undefined ? 0.4                : options.outerSpace,
     innerSpace      = options.innerSpace === undefined ? 0.4                : options.innerSpace,
@@ -32,7 +39,7 @@ var cGauge = function(options) {
     outerNums       = options.outerNums  === undefined ? true               : options.outerNums,
     minNum          = options.minNum     === undefined ? true               : options.minNum,
     maxNum          = options.maxNum     === undefined ? true               : options.maxNum,
-    valueRange      = maxValue - minValue,
+    valueRange      = max - min,
     shadowColor     = 'rgb(155, 155, 155)',
     shadowSize      = 0.15,
     
@@ -53,53 +60,61 @@ var cGauge = function(options) {
     offset          = 134,
     preValForGauge  = 0,
     preVal          = 0,
-    preValSteps     = 0;
+    preValSteps     = 0
+  ;
 
     // shadow options / defaults
 
-    for (var x = 1; x <= 4; x++) {
-      if (options['shadow' + x]) {
-        if (options['shadow' + x].color) {
-          options['shadow' + x].color = options['shadow' + x].color;
-        } else {
-          options['shadow' + x].color = shadowColor;
-        }
-        if (typeof options['shadow' + x].size !== undefined) {
-          options['shadow' + x].size = options['shadow' + x].size;
-        } else {
-          options['shadow' + x].size = shadowSize;
-        }
+  for (var x = 1; x <= 4; x++) {
+    if (options['shadow' + x]) {
+      if (options['shadow' + x].color) {
+        options['shadow' + x].color = options['shadow' + x].color;
       } else {
-        if (noShadows) {
-          options['shadow' + x] = {
-            color: shadowColor,
-            size: 0
-          };
-        } else {
-          options['shadow' + x] = {
-            color: shadowColor,
-            size: shadowSize
-          };
-        }
+        options['shadow' + x].color = shadowColor;
+      }
+      if (typeof options['shadow' + x].size !== undefined) {
+        options['shadow' + x].size = options['shadow' + x].size;
+      } else {
+        options['shadow' + x].size = shadowSize;
+      }
+    } else {
+      if (noShadows) {
+        options['shadow' + x] = {
+          color: shadowColor,
+          size: 0
+        };
+      } else {
+        options['shadow' + x] = {
+          color: shadowColor,
+          size: shadowSize
+        };
       }
     }
+  }
 
-    var shadow1 = options.shadow1;
-    var shadow2 = options.shadow2;
-    var shadow3 = options.shadow3;
-    var shadow4 = options.shadow4;
+  var 
+    shadow1 = options.shadow1,
+    shadow2 = options.shadow2,
+    shadow3 = options.shadow3,
+    shadow4 = options.shadow4
+  ;
 
 
   // Warnings
   if (document.contains && !document.contains(node)) {
     console.warn('cGauge DOM node not properly defined!');
   }
+  if (W < 1) {
+    console.warn("Your cGauge has a size of 0! You probably just need to set the width and height of the parent element. If this doesn't work, consider looking up offsetWidth, which can sometimes return 0.");
+  }
   
   // Initialize canvases and contexts
-  var ctx  = createCanvas(1, W, H),
-      ctx2 = createCanvas(2, W, H),
-      ctx3 = createCanvas(3, W, H),
-      ctx4 = createCanvas(4, W, H);
+  var 
+    ctx  = createCanvas(1, W, H),
+    ctx2 = createCanvas(2, W, H),
+    ctx3 = createCanvas(3, W, H),
+    ctx4 = createCanvas(4, W, H)
+  ;
   
   function createCanvas(num, width, height) {
     var left = 0, top = 0;
@@ -121,12 +136,15 @@ var cGauge = function(options) {
     var val_dist = normalizeValue(value);
     setGauge(val_dist[0], val_dist[1], value);
   };
-  this.setMaxValue = function(maxValue) {
-    updateMaxAndPerimeterValues(maxValue); 
+  this.setMaxValue = function(max) {
+    updateMaxAndPerimeterValues(max); 
   };
   this.setUnit = function(unit) {
     updateUnit(unit);
   };
+  this.setTitle = function(title) {
+    updateTitle(title);
+  }
   
   // Main
   // Outer radiant lines
@@ -161,9 +179,11 @@ var cGauge = function(options) {
   if (value !== undefined)
     this.setValue(value);
   if (value !== undefined)
-    this.setMaxValue(maxValue);
+    this.setMaxValue(max);
   if (value !== undefined)
     this.setUnit(unit);
+  if (title !== '')
+    this.setTitle(title);
 
   function findGoodMax(x) {
     var y = Math.pow(10, x.toString().length - 1);
@@ -175,12 +195,12 @@ var cGauge = function(options) {
 
   function normalizeValue(val){
     var valForGauge;
-    if (val < minValue) {
+    if (val < min) {
       valForGauge = 0;
     }
     else {
-      var totalRange = Math.abs(minValue - maxValue);
-      var computedVal = Math.abs(minValue - val);
+      var totalRange = Math.abs(min - max);
+      var computedVal = Math.abs(min - val);
       valForGauge = Math.round((computedVal * 272) / totalRange);      
     }
 
@@ -190,19 +210,19 @@ var cGauge = function(options) {
     return [valForGauge, distance];
   }
 
-  function updateMaxAndPerimeterValues(maxValue) {
-    var fontSize     = Math.round(W * 0.04);
-    ctx.font         = fontSize + 'px ' + font;
+  function updateMaxAndPerimeterValues(max) {
+    var fontSize     = perimFontSize || Math.round(W * 0.04) + 'px';
+    ctx.font         = fontSize + ' ' + font;
     ctx.fillStyle    = fontColor;
-    var text1_4      = '' + Math.round((valueRange / 4) + minValue);
-    var text2_4      = '' + Math.round((valueRange / 2) + minValue);
-    var text3_4      = '' + Math.round((valueRange * 3 / 4)  + minValue);
+    var text1_4      = '' + Math.round((valueRange / 4) + min);
+    var text2_4      = '' + Math.round((valueRange / 2) + min);
+    var text3_4      = '' + Math.round((valueRange * 3 / 4)  + min);
     var text1_4Width = ctx.measureText(text1_4).width;
     var text2_4Width = ctx.measureText(text2_4).width;
-    if (maxNum) { ctx.fillText(maxValue, W * 0.75, W * 0.77); }
+    if (maxNum) { ctx.fillText(max, W * 0.75, W * 0.77); }
     if (minNum) {
-      var minValueWidth = ctx.measureText(minValue).width;
-      ctx.fillText(minValue, W * 0.249 - minValueWidth, W * 0.77); 
+      var minValueWidth = ctx.measureText(min).width;
+      ctx.fillText(min, W * 0.249 - minValueWidth, W * 0.77); 
     }
     if (outerNums) {
       ctx.fillText(text1_4, W * 0.17 - text1_4Width, W * 0.37);
@@ -214,8 +234,8 @@ var cGauge = function(options) {
   function updateCenterText(val) {
     ctx4.clearRect(0, 0, W, H);
     ctx4.fillStyle     = fontColor;
-    var fontSize       = Math.round(W * 0.08);
-    ctx4.font          = fontSize + 'px ' + font;
+    var fontSize       = valueFontSize || Math.round(W * 0.08) + 'px';
+    ctx4.font          = fontSize + ' ' + font;
     var text           = '' + val;
     var text_width     = ctx4.measureText(text).width;
     ctx4.shadowColor   = "rgb(90,90,90)";
@@ -229,10 +249,19 @@ var cGauge = function(options) {
     var text      = '' + unit;
     var space     = W * 0.22;
     var maxSize   = Math.round(W * 0.1);
-    ctx.font      = getGoodFontSize(ctx, text, space, font, maxSize);
+    ctx.font      = unitFontSize ? unitFontSize + 'px ' + font : getGoodFontSize(ctx, text, space, font, maxSize);
     ctx.fillStyle = fontColor;
     var textWidth = ctx.measureText(text).width;
-    ctx.fillText(text, W * 0.5 - textWidth/2, W * 0.5 + W * 0.2); // to center text
+    ctx.fillText(text, W * 0.5 - textWidth/2, W * 0.7); // to center text
+  }
+
+  function updateTitle(title) {
+    var text = '' + title;
+    var space = W * .90;
+    ctx.font  = titleFontSize ? titleFontSize + ' ' + font : getGoodFontSize(ctx, text, space, font, W * 0.12);
+    ctx.fillStyle = fontColor;
+    var textWidth = ctx.measureText(text).width;
+    ctx.fillText(text, (W * 0.5 - textWidth/2) + titleOffset[0], (W * 0.13) + titleOffset[1]); // to center text
   }
 
   function getGoodFontSize(ctx, text, space, font, maxSize) {
