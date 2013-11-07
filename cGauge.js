@@ -19,6 +19,11 @@ var cGauge = function(options) {
     titleFontSize   = options.titleFontSize || fontSize,
     unitFontSize    = options.unitFontSize  || fontSize,
     perimFontSize   = options.perimFontSize || fontSize,
+    font            = options.font          || 'sans-serif',
+    valueFont       = options.valueFont     || font,
+    titleFont       = options.titleFont     || font,
+    unitFont        = options.unitFont      || font,
+    perimFont       = options.perimFont     || font,
     title           = options.title         || '',
     titleOffset     = options.titleOffset   || [0, 0],
     unit            = options.unit          || '',
@@ -26,7 +31,6 @@ var cGauge = function(options) {
     arcColor        = options.arcColor      || '#27AE60',
     arcWidth        = options.arcWidth      || 1,  
     fillColor       = options.fillColor     || 'rgb(230, 230, 230)',
-    font            = options.font          || 'sans-serif',
     fontColor       = options.fontColor     || 'rgb(80, 80, 80)',
     tickColor       = options.tickColor     || 'rgb(80,80,80)',
     noShadows       = options.noShadows     || false, 
@@ -36,7 +40,7 @@ var cGauge = function(options) {
     outerSpace      = options.outerSpace === undefined ? 0.4                : options.outerSpace,
     innerSpace      = options.innerSpace === undefined ? 0.4                : options.innerSpace,
     ticks           = options.ticks      === undefined ? 40                 : options.ticks,
-    outerNums       = options.outerNums  === undefined ? true               : options.outerNums,
+    perimNums       = options.perimNums  === undefined ? true               : options.perimNums,
     minNum          = options.minNum     === undefined ? true               : options.minNum,
     maxNum          = options.maxNum     === undefined ? true               : options.maxNum,
     valueRange      = max - min,
@@ -144,7 +148,7 @@ var cGauge = function(options) {
   };
   this.setTitle = function(title) {
     updateTitle(title);
-  }
+  };
   
   // Main
   // Outer radiant lines
@@ -212,7 +216,7 @@ var cGauge = function(options) {
 
   function updateMaxAndPerimeterValues(max) {
     var fontSize     = perimFontSize || Math.round(W * 0.04) + 'px';
-    ctx.font         = fontSize + ' ' + font;
+    ctx.font         = fontSize + ' ' + perimFont;
     ctx.fillStyle    = fontColor;
     var text1_4      = '' + Math.round((valueRange / 4) + min);
     var text2_4      = '' + Math.round((valueRange / 2) + min);
@@ -224,7 +228,7 @@ var cGauge = function(options) {
       var minValueWidth = ctx.measureText(min).width;
       ctx.fillText(min, W * 0.249 - minValueWidth, W * 0.77); 
     }
-    if (outerNums) {
+    if (perimNums) {
       ctx.fillText(text1_4, W * 0.17 - text1_4Width, W * 0.37);
       ctx.fillText(text2_4, W * 0.5 - text2_4Width/2, W * 0.143);
       ctx.fillText(text3_4, W * 0.825, W * 0.37);
@@ -235,7 +239,7 @@ var cGauge = function(options) {
     ctx4.clearRect(0, 0, W, H);
     ctx4.fillStyle     = fontColor;
     var fontSize       = valueFontSize || Math.round(W * 0.08) + 'px';
-    ctx4.font          = fontSize + ' ' + font;
+    ctx4.font          = fontSize + ' ' + valueFont;
     var text           = '' + val;
     var text_width     = ctx4.measureText(text).width;
     ctx4.shadowColor   = "rgb(90,90,90)";
@@ -249,7 +253,7 @@ var cGauge = function(options) {
     var text      = '' + unit;
     var space     = W * 0.22;
     var maxSize   = Math.round(W * 0.1);
-    ctx.font      = unitFontSize ? unitFontSize + 'px ' + font : getGoodFontSize(ctx, text, space, font, maxSize);
+    ctx.font      = unitFontSize ? unitFontSize + 'px ' + unitFont : getGoodFontSize(ctx, text, space, unitFont, maxSize);
     ctx.fillStyle = fontColor;
     var textWidth = ctx.measureText(text).width;
     ctx.fillText(text, W * 0.5 - textWidth/2, W * 0.7); // to center text
@@ -257,8 +261,8 @@ var cGauge = function(options) {
 
   function updateTitle(title) {
     var text = '' + title;
-    var space = W * .90;
-    ctx.font  = titleFontSize ? titleFontSize + ' ' + font : getGoodFontSize(ctx, text, space, font, W * 0.12);
+    var space = W * 0.9;
+    ctx.font  = titleFontSize ? titleFontSize + ' ' + titleFont : getGoodFontSize(ctx, text, space, titleFont, W * 0.12);
     ctx.fillStyle = fontColor;
     var textWidth = ctx.measureText(text).width;
     ctx.fillText(text, (W * 0.5 - textWidth/2) + titleOffset[0], (W * 0.13) + titleOffset[1]); // to center text

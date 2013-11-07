@@ -51,23 +51,27 @@ var defaultOptions = {
   title        : '',
   titleOffset  : [0, 0],                    // [x, y] offset, numbers only
   fontSize     : '',                        // you must specify units i.e. '12px'
-  valueFontSize: '',                        // defaults to fontSize if defined
+  valueFontSize: '',                        // defaults to fontSize if fontSize is defined
   titleFontSize: '',
   unitFontSize : '',
   perimFontSize: '',
+  font         : 'sans-serif',              // font-weight, style may be specified like 'Arial Bold', you must spcify the font-name to do this, 'sans-serif Bold' will not work for unknown reason. 
+  valueFont    : '',                        // defaults to font
+  titleFont    : '',                        // defaults to font
+  unitFont     : '',                        // defaults to font
+  perimFont    : '',                        // defaults to font
   value        : 0,
   min          : 0,
   max          : 100,                       // actually defaults to function findGoodMax(value);
   arcColor     : '#27AE60',
   arcWidth     : 1,
-  font         : 'sans-serif',
   fillColor    : 'rgb(230, 230, 230)',
   fontColor    : 'rgb(80, 80, 80)',
   tickColor    : 'rgb(80,80,80)',
   outerSpace   : 0.4,
   innerSpace   : 0.4,
   ticks        : 40,                        // If not evenly divisible by 4, long ticks will be omitted.
-  outerNums    : true,
+  perimNums    : true,
   minNum       : true,
   maxNum       : true,
   center       : true,                      // centers gauge within containing element
@@ -88,7 +92,7 @@ var defaultOptions = {
     size : .15,
     color: 'rgb(155, 155, 155)'                 
   }
-}
+};
 
 // gauge1 (conventional implimentation)
 
@@ -98,7 +102,7 @@ var options1 = {
     titleFontSize: '18px',
     unit: 'zBwas',
     outerNums: false
-}
+};
 
 var gauge1 = new cGauge(options1);
 
@@ -122,7 +126,7 @@ var options2 = {
       size: .5,
       color: '#00ff19'
     }
-}
+};
 
 var gauge2 = $('#gauge2').cGauge(options2);
 
@@ -147,7 +151,7 @@ var options3 = {
     // maxNum: false,
     arcWidth: .87,
     noShadows: true
-}
+};
 
 var gauge3 = $('#gauge3').cGauge(options3);
 
@@ -157,7 +161,8 @@ setInterval(function(){
 
 var options4 = {
     unit: 'Floos',
-    font: 'sans-serif',
+    font: 'Arial Italic',
+    valueFont: 'Arial Bold',
     value: -543,
     arcColor: '#ffaa00',
     arcWidth: .8,
@@ -166,7 +171,7 @@ var options4 = {
     min: -1000,
     ticks: 1600,
     noShadows: true
-}
+};
 
 var gauge4 = $('#gauge4').cGauge(options4);
 

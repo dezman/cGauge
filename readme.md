@@ -11,7 +11,7 @@ Introducing yet another canvas gauge plugin!
         unit: 'zBwas',
         value: 71,
         outerNums: false
-    }
+    };
     var gauge1 = new cGauge(options1);
 
 ###jQuery Implementation
@@ -20,7 +20,7 @@ Introducing yet another canvas gauge plugin!
         unit: 'Bananas',
         value: 17,
         maxValue: 50
-    }
+    };
     var gauge2 = $('#gauge2').cGauge(options2);
 
 ## Options
@@ -32,23 +32,27 @@ There are many options to mess with in cGauge, here is a list of all of them alo
       title        : '',
       titleOffset  : [0, 0],                    // [x, y] offset, numbers only
       fontSize     : '',                        // you must specify units i.e. '12px'
-      valueFontSize: '',                        // defaults to fontSize if defined
+      valueFontSize: '',                        // defaults to fontSize if fontSize is defined
       titleFontSize: '',
       unitFontSize : '',
       perimFontSize: '',
+      font         : 'sans-serif',              // font-weight, style may be specified like 'Arial Bold', you must spcify the font-name to do this, 'sans-serif Bold' will not work for unknown reason. 
+      valueFont    : '',                        // defaults to font
+      titleFont    : '',                        // defaults to font
+      unitFont     : '',                        // defaults to font
+      perimFont    : '',                        // defaults to font
       value        : 0,
       min          : 0,
       max          : 100,                       // actually defaults to function findGoodMax(value);
       arcColor     : '#27AE60',
       arcWidth     : 1,
-      font         : 'sans-serif',
       fillColor    : 'rgb(230, 230, 230)',
       fontColor    : 'rgb(80, 80, 80)',
       tickColor    : 'rgb(80,80,80)',
       outerSpace   : 0.4,
       innerSpace   : 0.4,
       ticks        : 40,                        // If not evenly divisible by 4, long ticks will be omitted.
-      outerNums    : true,
+      perimNums    : true,
       minNum       : true,
       maxNum       : true,
       center       : true,                      // centers gauge within containing element
@@ -69,5 +73,5 @@ There are many options to mess with in cGauge, here is a list of all of them alo
         size : .15,
         color: 'rgb(155, 155, 155)'                 
       }
-    }
+    };
 
