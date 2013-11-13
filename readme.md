@@ -34,6 +34,7 @@ There are many options to mess with in cGauge, here is a list of all of them alo
       title        : '',
       titleOffset  : [0, 0],                    // [x, y] offset, numbers only
       valueOffset  : [0, 0],                    // [x, y] offset, numbers only
+      gaugeOffset  : [0, 0],                    // [x, y] offset, numbers only
       fontSize     : '',                        // you must specify units i.e. '12px'
       valueFontSize: '',                        // defaults to fontSize if fontSize is defined
       titleFontSize: '',

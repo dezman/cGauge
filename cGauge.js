@@ -18,6 +18,7 @@ var cGauge = function(options) {
     unitFont        = options.unitFont      || font,
     perimFont       = options.perimFont     || font,
     title           = options.title         || '',
+    gaugeOffset     = options.gaugeOffset   || [0, 0],
     titleOffset     = options.titleOffset   || [0, 0],
     valueOffset     = options.valueOffset   || [0, 0],
     unit            = options.unit          || '',
@@ -55,11 +56,12 @@ var cGauge = function(options) {
     outerTickRadius = W * 0.345,
     startRadians    = 0,
     endRadians      = 272,
-    deg2rad         = Math.PI / 180.0001,     // not 180 to fix midpoint bug in Chrome (http://stackoverflow.com/questions/17557980/why-is-my-canvas-animated-arc-glitching-at-the-midpoint).
+    deg2rad         = Math.PI / 180.0001,                  // not 180 to fix midpoint bug in Chrome (http://stackoverflow.com/questions/17557980/why-is-my-canvas-animated-arc-glitching-at-the-midpoint).
     offset          = 134,
     preValForGauge  = 0,
     preVal          = 0,
-    preValSteps     = 0
+    preValSteps     = 0,
+    canvasContainer = document.createElement('div')
   ;
 
   // shadow options / defaults
@@ -99,6 +101,11 @@ var cGauge = function(options) {
   }
   
   // Initialize canvases and contexts
+
+  canvasContainer.setAttribute('style', 'position: relative; width: ' + W + 'px; height: ' + H + 'px; left: 50%; margin-left:' + (-cx + gaugeOffset[0]) + 'px; top: 50%; margin-top: ' + (-cy + gaugeOffset[1]) + 'px;');
+  canvasContainer.setAttribute('class', 'cGauge');
+  node.appendChild(canvasContainer);
+
   var 
     ctx  = createCanvas(1, W, H), // outerNums, unit
     ctx2 = createCanvas(2, W, H), // valueArc
@@ -107,9 +114,9 @@ var cGauge = function(options) {
   ;
 
   // Accessible functions
-  this.setValue = function(value) {
-    var normVals = normalizeValue(value);
-    setGauge(normVals[0], normVals[1], value);
+  this.setValue = function(newValue) {
+    var normVals = normalizeValue(newValue);
+    setGauge(normVals[0], normVals[1], newValue);
     return this;
   };
   this.setMaxValue = function(maxVal) {
@@ -137,7 +144,7 @@ var cGauge = function(options) {
     updateTitle(title);
     return this;
   };
-
+ 
   // invoke
   updateMaxAndPerimeterValues(max);  
   if (value !== undefined)
@@ -185,7 +192,7 @@ var cGauge = function(options) {
     canvasNode.setAttribute('height', height);
     canvasNode.setAttribute('style', 'position: absolute;' /* left: ' + left + '; top: ' + top + ';'*/);
     canvasNode.setAttribute('id', nodeID + 'Canvas' + num);
-    node.appendChild(canvasNode);
+    canvasContainer.appendChild(canvasNode);
     return canvasNode.getContext("2d");
   }
 
@@ -302,6 +309,7 @@ var cGauge = function(options) {
   }
 
   function setGauge(valForGauge, distance, val) {
+    value = val;
     if (isGoodNum(valForGauge) && isGoodNum(distance) && isGoodNum(val)) {
       if (!animateGauge.animating) {
         animateGauge(valForGauge, distance, val);

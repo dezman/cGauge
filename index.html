@@ -51,6 +51,7 @@ var defaultOptions = {
   title        : '',
   titleOffset  : [0, 0],                    // [x, y] offset, numbers only
   valueOffset  : [0, 0],                    // [x, y] offset, numbers only
+  gaugeOffset  : [0, 0],
   fontSize     : '',                        // you must specify units i.e. '12px'
   valueFontSize: '',                        // defaults to fontSize if fontSize is defined
   titleFontSize: '',
@@ -75,7 +76,6 @@ var defaultOptions = {
   perimNums    : true,
   minNum       : true,
   maxNum       : true,
-  //center       : true,                      // centers gauge within containing element
   noShadows    : false,
   shadow1: {                                // Shadows are ordered 1-4 from outermost to innermost,
     size : .15,
@@ -108,7 +108,7 @@ var options1 = {
 var gauge1 = new cGauge(options1);
 
 setInterval(function(){
-    gauge1.setValue(Math.round(Math.random() * 160));
+    gauge1.setMaxValue(300).setValue(Math.round(Math.random() * 160)); // for chaining it is better call setMaxValue() before setValue()
 }, 2000);
 // setInterval(function(){
 //     gauge1.setMaxValue(Math.round(Math.random() * 160));
