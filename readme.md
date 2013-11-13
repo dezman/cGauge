@@ -31,6 +31,7 @@ There are many options to mess with in cGauge, here is a list of all of them alo
       unit         : '',
       title        : '',
       titleOffset  : [0, 0],                    // [x, y] offset, numbers only
+      valueOffset  : [0, 0],                    // [x, y] offset, numbers only
       fontSize     : '',                        // you must specify units i.e. '12px'
       valueFontSize: '',                        // defaults to fontSize if fontSize is defined
       titleFontSize: '',
@@ -55,7 +56,6 @@ There are many options to mess with in cGauge, here is a list of all of them alo
       perimNums    : true,
       minNum       : true,
       maxNum       : true,
-      center       : true,                      // centers gauge within containing element
       noShadows    : false,
       shadow1: {                                // Shadows are ordered 1-4 from outermost to innermost,
         size : .15,
