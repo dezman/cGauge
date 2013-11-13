@@ -1,6 +1,8 @@
 #cGauge
 
-Introducing yet another canvas gauge plugin! 
+Introducing yet another canvas gauge / jQuery plugin! 
+
+![alt tag](https://raw.github.com/robertsadler/cGauge/master/Gauges.png)
 
 ## Usage
 
