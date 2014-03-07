@@ -11,26 +11,24 @@
   <style>
 
   #gauge1 {
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     float: left;
   }
   #gauge2 {
-    width: 500px;
+    width: 400px;
     height: 500px;
     float: right;
   }
-  #gauge3 {
-    width: 600px;
-    height: 600px;
+/*  #gauge3 {
+    width: 300px;
+    height: 400px;
     float: right;
-  }
+  }*/
   #gauge4 {
-    width: 800px;
-    height: 800px;
+    width: 450px;
+    height: 450px;
     float: left;
-    position: relative;
-    top: -400px;
   }
 
   </style>
@@ -57,7 +55,7 @@ var defaultOptions = {
   titleFontSize: '',
   unitFontSize : '',
   perimFontSize: '',
-  font         : 'sans-serif',              // font-weight, style may be specified like 'Arial Bold', you must spcify the font-name to do this, 'sans-serif Bold' will not work for unknown reason. 
+  font         : 'sans-serif',              // font-weight, style may be specified like 'Arial Bold', you must spcify the font-name to do this, 'sans-serif Bold' will not work for unknown reason.
   valueFont    : '',                        // defaults to font
   titleFont    : '',                        // defaults to font
   unitFont     : '',                        // defaults to font
@@ -79,7 +77,7 @@ var defaultOptions = {
   noShadows    : false,
   shadow1: {                                // Shadows are ordered 1-4 from outermost to innermost,
     size : .15,
-    color: 'rgb(155, 155, 155)'             // Must be rgb or hex code, css color-names will not work.             
+    color: 'rgb(155, 155, 155)'             // Must be rgb or hex code, css color-names will not work.
   },
   shadow2: {
     size : .15,
@@ -91,7 +89,7 @@ var defaultOptions = {
   },
   shadow4: {
     size : .15,
-    color: 'rgb(155, 155, 155)'                 
+    color: 'rgb(155, 155, 155)'
   }
 };
 
@@ -101,6 +99,7 @@ var options1 = {
     node: document.getElementById('gauge1'),
     title: 'Cool Animals',
     titleFontSize: '18px',
+    titleOffset: [0, -20],
     unit: 'zBwas',
     value: 34
 };
@@ -126,7 +125,7 @@ var options2 = {
     ticks: 0,
     font: 'Andale Mono, AndaleMono, monospace',
     noShadows: true,
-    shadow4: {                                    
+    shadow4: {
       size: .5,
       color: '#00ff19'
     }
@@ -138,44 +137,41 @@ setInterval(function(){
     gauge2.setValue(Math.round((Math.random() * 200) - 200));
 }, 6253);
 
-var options3 = {
-    value: 45,
-    ticks: 16,
-    max: 130, 
-    arcColor: '#ff0077',
-    unit: '°F',
-    perimFontSize: '15px',
-    unitFontSize: '12px',
-    valueFontSize: '20px',
-    titleFontSize: '20px',
-    title: 'My Temp.',
-    titleOffset: [0, -20],
-    // outerNums: false,
-    // minNum: false,
-    // maxNum: false,
-    arcWidth: .87,
-    noShadows: true
-};
+// var options3 = {
+//     value: 45,
+//     ticks: 16,
+//     max: 130,
+//     arcColor: '#ff0077',
+//     unit: '°F',
+//     perimFontSize: '15px',
+//     unitFontSize: '12px',
+//     valueFontSize: '20px',
+//     titleFontSize: '20px',
+//     title: 'My Temp.',
+//     titleOffset: [0, -20],
+//     // outerNums: false,
+//     // minNum: false,
+//     // maxNum: false,
+//     arcWidth: .87,
+//     noShadows: true
+// };
 
-var gauge3 = $('#gauge3').cGauge(options3);
+// var gauge3 = $('#gauge3').cGauge(options3);
 
 // setInterval(function(){
-//     gauge3.setValue(Math.round(Math.random() * options3.max));
-// }, 2000);
-setInterval(function(){
-    gauge3.setMaxValue(Math.round(Math.random() * options3.max));
-}, 3000);
+//     gauge3.setMaxValue(Math.round(Math.random() * options3.max));
+// }, 3000);
 
 var options4 = {
     unit: 'Flos',
     font: 'Arial Italic',
     valueFont: 'Arial Bold',
-    value: 543000000000000,
+    value: 54300,
     arcColor: '#ffaa00',
     arcWidth: .8,
     fillColor: 'white',
-    max: 1000000000000000,
-    min: -1000000000000000,
+    max: 100000,
+    min: -100000,
     ticks: 1600,
     noShadows: true
 };
